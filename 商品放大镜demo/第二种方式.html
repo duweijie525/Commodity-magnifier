@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>放大镜</title>
+		<style type="text/css">
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			#box{
+				position: relative;
+				margin: 100px;
+			}
+			#small{
+				position: relative;
+				width: 300px;
+				height: 400px;
+			}
+			#mask{
+				width: 160px;
+				height: 160px;
+				background: rgba(255, 255, 0, 0.4);
+				position: absolute;
+				top: 0;
+				left: 0;
+				cursor: move;
+				display: none;
+			}
+			#big{
+				width: 400px;
+				height: 400px;
+				position: absolute;
+				top: 0;
+				left: 360px;
+				/* border: 1px solid #ccc; */
+				overflow: hidden;
+				display: none;
+			}
+			#bigImg{
+				position: absolute;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="box" class="box">
+			<div id="small">
+				<img src="img/small.jpg" >
+				<div id="mask"></div>
+			</div>
+			<div id="big">
+				<img src="img/big.jpg" id="bigImg">
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		//获取外面的大盒子
+		var box = document.getElementById("box");
+		//获取里面的小盒子
+		var small = document.getElementById("small");
+		//获取里面的mask放大框
+		var mask = document.getElementById('mask');
+		//获取包含大图片的大盒子
+		var big = document.getElementById('big');
+		//获取大盒子里面的图片
+		var img = document.getElementById("bigImg")
+		
+		//设置小盒子的移入事件 移入显示 移出隐藏
+		//onmouseover---鼠标移入事件
+		small.onmouseover = function(){
+			mask.style.display = "block";
+			big.style.display = "block";
+		}
+		//获得鼠标在small里面的坐标
+		//onmousemovea---鼠标移动事件
+		small.onmousemove = function(e){
+			e = event || window.event;
+		// console.log(event)
+		//获取屏幕点击时候的坐标
+		var pagex =event.clientX;
+		//clientX,clientY是鼠标点击的时候鼠标到屏幕最左边的距离
+		var pagey = event.clientY;
+		// console.log(pagex)
+		var left = pagex -(100+80)  //获取屏幕点击时候x轴的坐标
+		var top = pagey -(100+80)  //获取屏幕点击时候的y轴坐标
+		//判断mask在屏幕上下左右四个角的位置
+		//mask在左上角的时候
+		if(pagex<=(100+80)){
+			left=0;
+		}
+		//mask在右上角的时候
+		if(pagey<=(100+80)){
+			top = 0;
+		}
+		//mask在右下角的时候
+		if(pagex >=(300-160+100+80)){
+			left = 140;
+		}
+		//mask在左下角的时候
+		if (pagey>=(400-160+100+80)){
+			top = 240;
+		}
+		//mask移动
+		mask.style.left = left +"px";
+		mask.style.top = top + "px";
+		//计算等比缩放的bigImg
+		img.style.left = (left/300*-750)+'px';
+		img.style.top = (top/400*-1000)+'px';
+		}
+		
+		//onmouseout---鼠标移出事件
+		small.onmouseout = function(){
+			mask.style.display = "none";
+			big.style.display = "none"
+		}
+	</script>
+</html>
